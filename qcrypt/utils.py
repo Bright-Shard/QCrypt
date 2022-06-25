@@ -1,20 +1,20 @@
-import math
-from qcrypt.key import QCryptKey
-from qcrypt.message import QCryptMessage
+from qcrypt.datatypes import QCryptMessage, QCryptKey
 
 
-def size_key(key: QCryptKey, msg: QCryptMessage) -> bin:
-    print(f"MSG BINARY SIZE: {msg.len()}\n   HALF: {msg.len_half()}")
+# Half of the data is encrypted via XORing the data with the key
+def xor_msg(key: QCryptKey, msg: QCryptMessage) -> bin:
+    # Ensure the key is the right length
+    key.resize_from_msg(msg)
 
-    if key.len() > msg.len_half():
-        newkey: str = key.bytes()[:msg.len_half()]
-    else:
-        remainder: int = msg.len_half() % key.len()
-        #print(f"REMAINDER: {remainder}")
-        multiple: int = math.floor(msg.len_half() / key.len())
-        #print(f"MULTIPLE: {multiple}")
-        newkey: str = (key.bytes() * multiple) + \
-                      (key.bytes()[:remainder] if remainder > 0 else "")
+    # XOR the key by the first half of the data
+    xor: bin = bin(int(key.resized_value(), 2) ^ int(msg.half_one(), 2))
+    # Format the xor variable so it reads like proper binary
+    xor: bin = xor[2:].zfill(key.resized_length())
 
-    print(f"OLD KEY SIZE: {key.len()}\n   NEW SIZE: {len(newkey)}\nOLD KEY: {key.bytes()}\n   NEW KEY: {newkey}")
-    return newkey
+    return xor
+
+
+# Transform binary to unicode text
+def bin_to_text(binary: bin) -> str:
+    # Special thanks: https://stackoverflow.com/a/40559005
+    return ''.join(chr(int(binary[i*8:i*8+8], 2)) for i in range(len(binary) // 8))
