@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from qcrypt import QCrypt
 load_dotenv()
 
-qcrypt: QCrypt = QCrypt(5, os.getenv("IBM_KEY"), "server_name", use_ibmq=False)
+qcrypt: QCrypt = QCrypt(os.getenv("IBM_KEY"), "server_name", use_ibmq=False)
 
 print("------")
 print(f"KEY: |{qcrypt.key.data()}| ({qcrypt.key.len()} chars)")

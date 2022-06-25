@@ -6,7 +6,7 @@ from qcrypt.circuit import QCryptCircuit
 
 class QCrypt:
     # CONSTRUCTOR
-    def __init__(self, qubits: int, api_key: str, server: str, *args, use_ibmq: bool = True) -> None:
+    def __init__(self, api_key: str, server: str, *args, use_ibmq: bool = True) -> None:
         # Message, key, and whether to use IBMQ or a simulator
         self.message: QCryptMessage = QCryptMessage()
         self.key: QCryptKey = QCryptKey()
